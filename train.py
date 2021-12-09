@@ -4,7 +4,7 @@ import os
 
 import pytorch_lightning as pl
 import torch
-from pytorch_lightning.callbacks import ModelCheckpoint
+from pytorch_lightning.callbacks import EarlyStopping
 from torch.nn import functional as F
 from torch.utils.data import DataLoader
 
@@ -209,17 +209,20 @@ def cli_main():
 
     # training
 
-    checkpoint_callback = ModelCheckpoint(
-        save_top_k=5,
-        verbose=True,
-        monitor="val_loss",
-        mode="min"
-    )
+    #checkpoint_callback = EarlyStopping(
+    #    save_top_k=5,
+    #    verbose=True,
+    #    monitor="val_loss",
+    #    mode="min"
+    #)
+    
+    early_stopping_callback = EarlyStopping(monitor="val_loss", patience=2, verbose=False, mode="min")
+    
     trainer = pl.Trainer(
         gpus=args.device,
         max_epochs=args.n_epochs,
         accumulate_grad_batches=config["accumulate_grad_batches"],
-        callbacks=[checkpoint_callback],
+        callbacks=[early_stopping_callback],
         resume_from_checkpoint=args.resume,
         default_root_dir="saved/" + config["name"],
         deterministic=False,
