@@ -9,8 +9,8 @@
         "args": {
             "num_classes": 6,
             "model_type": "distilroberta-base",
-            "model_name": "AutoModelForSequenceClassification",
-            "tokenizer_name": "AutoTokenizer"
+            "model_name": "RobertaForSequenceClassification",
+            "tokenizer_name": "RobertaTokenizer"
         }
     },
     "dataset": {
