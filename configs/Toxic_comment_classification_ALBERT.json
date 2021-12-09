@@ -16,8 +16,8 @@
     "dataset": {
         "type": "JigsawDataOriginal",
         "args": {
-            "train_csv_file": "jigsaw_data/jigsaw-toxic-comment-classification-challenge/train.csv",
-            "test_csv_file": "jigsaw_data/jigsaw-toxic-comment-classification-challenge/val.csv",
+            "train_csv_file": "jigsaw_data/train.csv",
+            "test_csv_file": "jigsaw_data/test_updated.csv",
             "add_test_labels": false,
             "classes": [
                 "toxicity",
