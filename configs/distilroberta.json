@@ -1,0 +1,40 @@
+{
+    "name": "Jigsaw_DISTILROBERTA",
+    "n_gpu": 1,
+    "batch_size": 10,
+    "accumulate_grad_batches": 3,
+    "loss": "binary_cross_entropy",
+    "arch": {
+        "type": "BERT",
+        "args": {
+            "num_classes": 6,
+            "model_type": "distilroberta-base",
+            "model_name": "AutoModelForSequenceClassification",
+            "tokenizer_name": "AutoTokenizer"
+        }
+    },
+    "dataset": {
+        "type": "JigsawDataOriginal",
+        "args": {
+            "train_csv_file": "/jigsaw_data/train.csv",
+            "test_csv_file": "/jigsaw_data/test_updated.csv",
+            "add_test_labels": false,
+            "classes": [
+                "toxicity",
+                "severe_toxicity",
+                "obscene",
+                "threat",
+                "insult",
+                "identity_attack"
+            ]
+        }
+    },
+    "optimizer": {
+        "type": "Adam",
+        "args": {
+            "lr": 3e-5,
+            "weight_decay": 3e-6,
+            "amsgrad": true
+        }
+    }
+}
