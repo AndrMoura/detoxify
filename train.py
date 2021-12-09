@@ -166,9 +166,9 @@ def cli_main():
     )
     parser.add_argument(
         "--num_workers",
-        default=10,
+        default=5,
         type=str,
-        help="number of workers used in the data loader (default: 10)",
+        help="number of workers used in the data loader (default: 5)",
     )
     parser.add_argument(
         "-e", "--n_epochs", default=100, type=int, help="if given, override the num"
@@ -210,11 +210,10 @@ def cli_main():
     # training
 
     checkpoint_callback = ModelCheckpoint(
-        save_top_k=100,
+        save_top_k=5,
         verbose=True,
         monitor="val_loss",
-        mode="min",
-        save_on_train_epoch_end=True
+        mode="min"
     )
     trainer = pl.Trainer(
         gpus=args.device,
@@ -223,7 +222,7 @@ def cli_main():
         callbacks=[checkpoint_callback],
         resume_from_checkpoint=args.resume,
         default_root_dir="saved/" + config["name"],
-        deterministic=True,
+        deterministic=False,
     )
     trainer.fit(model, data_loader, valid_data_loader)
 
