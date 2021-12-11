@@ -1,16 +1,22 @@
 import argparse
+import torch
 import json
 import os
-
 import pytorch_lightning as pl
-import torch
-from pytorch_lightning.callbacks import EarlyStopping
+from pytorch_lightning.callbacks import EarlyStopping, ProgressBar
 from torch.nn import functional as F
 from torch.utils.data import DataLoader
-
 import src.data_loaders as module_data
 from src.utils import get_model_and_tokenizer
 
+
+class LitProgressBar(ProgressBar):
+   
+    def init_validation_tqdm(self):
+        bar = tqdm(            
+            disable=True,            
+        )
+        return bar
 
 class ToxicClassifier(pl.LightningModule):
     """Toxic comment classification for the Jigsaw challenges.
@@ -215,14 +221,15 @@ def cli_main():
     #    monitor="val_loss",
     #    mode="min"
     #)
-    
+
     early_stopping_callback = EarlyStopping(monitor="val_loss", patience=2, verbose=False, mode="min")
-    
+    bar = LitProgressBar()
+
     trainer = pl.Trainer(
         gpus=args.device,
         max_epochs=args.n_epochs,
         accumulate_grad_batches=config["accumulate_grad_batches"],
-        callbacks=[early_stopping_callback],
+        callbacks=[bar, early_stopping_callback],
         resume_from_checkpoint=args.resume,
         default_root_dir="saved/" + config["name"],
         deterministic=False,
