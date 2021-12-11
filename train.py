@@ -2,6 +2,7 @@ import argparse
 import torch
 import json
 import os
+from tqdm import tqdm
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks import EarlyStopping, ProgressBar
 from torch.nn import functional as F
