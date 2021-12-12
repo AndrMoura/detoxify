@@ -218,7 +218,7 @@ def cli_main():
 
     checkpoint_callback = ModelCheckpoint(
         save_top_k=3,
-        filename='toxicity-{epoch:02d}-{val_loss:.3f}'
+        filename='toxicity-{epoch:02d}-{val_loss:.3f}',
         verbose=True,
         monitor="val_loss",
         mode="min"
