@@ -4,7 +4,7 @@ import json
 import os
 from tqdm import tqdm
 import pytorch_lightning as pl
-from pytorch_lightning.callbacks import EarlyStopping, ProgressBar
+from pytorch_lightning.callbacks import EarlyStopping, ProgressBar, ModelCheckpoint
 from torch.nn import functional as F
 from torch.utils.data import DataLoader
 import src.data_loaders as module_data
@@ -216,21 +216,26 @@ def cli_main():
 
     # training
 
-    #checkpoint_callback = EarlyStopping(
-    #    save_top_k=5,
-    #    verbose=True,
-    #    monitor="val_loss",
-    #    mode="min"
-    #)
+    checkpoint_callback = ModelCheckpoint(
+        save_top_k=3,
+        filename='toxicity-{epoch:02d}-{val_loss:.3f}'
+        verbose=True,
+        monitor="val_loss",
+        mode="min"
+    )
 
-    early_stopping_callback = EarlyStopping(monitor="val_loss", patience=2, verbose=False, mode="min")
+    early_stopping_callback = EarlyStopping(monitor="val_loss", 
+                                            patience=2, 
+                                            verbose=False, 
+                                            mode="min")
+ 
     bar = LitProgressBar()
 
     trainer = pl.Trainer(
         gpus=args.device,
         max_epochs=args.n_epochs,
         accumulate_grad_batches=config["accumulate_grad_batches"],
-        callbacks=[bar, early_stopping_callback],
+        callbacks=[checkpoint_callback, bar, early_stopping_callback],
         resume_from_checkpoint=args.resume,
         default_root_dir="saved/" + config["name"],
         deterministic=False,
